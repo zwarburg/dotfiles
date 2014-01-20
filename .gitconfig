@@ -1,0 +1,36 @@
+[push]
+	default = upstream
+[user]
+	name = Zack Warburg
+	email = Zack.warburg@appfolio.com
+[credential]
+	helper = osxkeychain
+[alias]
+	b = branch
+	co = checkout
+	st = status
+	r = reset --hard
+	c = commit
+	b = branch
+	l = log --pretty=format:'%C(yellow)%H %n%C(yellow)%ad%n%Cblue[%cn]%n%s  %n' --decorate --date=short
+
+[color]
+	ui = true
+
+[color "branch"]
+	current = yellow black
+	local = yellow
+	remote = magenta
+
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red
+	new = green
+	whitespace = white reverse
+
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan reverse
+	branch = magenta

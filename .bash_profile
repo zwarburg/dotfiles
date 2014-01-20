@@ -70,6 +70,7 @@ alias prodlogs="ssh zack@log1.core.densd.appfolio.net"
 alias qalogs="ssh zack@log201.core.atl.appfolio.net"
 alias sel="launchctl stop homebrew.mxcl.selenium-server-standalone;sleep 5;launchctl start homebrew.mxcl.selenium-server-standalone"
 alias fit="rake fit"
+alias c="clear"
 
 
 
