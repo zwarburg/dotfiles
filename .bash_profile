@@ -41,6 +41,7 @@ alias prompt2="mate /etc/motd"
 
 alias sql="/Applications/MAMP/Library/bin/mysql --host=localhost -uroot -proot"
 
+alias dot='cd ~/dotfiles'
 alias admin='cd ~/src/admin/trunk'
 alias trunk='cd ~/src/property/property_bundle/trunk'
 alias p='cd ~/src/property/property_bundle/trunk/apps/property'
@@ -71,7 +72,7 @@ alias qalogs="ssh zack@log201.core.atl.appfolio.net"
 alias sel="launchctl stop homebrew.mxcl.selenium-server-standalone;sleep 5;launchctl start homebrew.mxcl.selenium-server-standalone"
 alias fit="rake fit"
 alias c="clear"
-
+alias mem="launchctl stop homebrew.mxcl.memcached; sleep 2;launchctl start homebrew.mxcl.memcached"
 
 
 alias glog="git log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white)— %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative"
