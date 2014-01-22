@@ -26,7 +26,7 @@ function parse_git_branch_and_add_brackets {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\ \[\1\]/'
 }
 
-
+#Bash basics
 alias finder="open ."
 alias back="cd -"
 alias clr="clear"
@@ -34,13 +34,13 @@ alias ll="ls -l"
 alias la="ls -a"
 alias lal="ls -al"
 alias cdd="cd ../"
-
+alias c="clear"
 alias reload="source ~/.bash_profile"
 alias prompt="mate ~/.bash_profile"
 alias prompt2="mate /etc/motd"
 
-alias sql="/Applications/MAMP/Library/bin/mysql --host=localhost -uroot -proot"
 
+#CD
 alias dot='cd ~/dotfiles'
 alias admin='cd ~/src/admin/trunk'
 alias trunk='cd ~/src/property/property_bundle/trunk'
@@ -51,35 +51,40 @@ alias listings='cd ~/src/property/property_bundle/trunk/apps/listings'
 alias t='cd ~/src/property/property_bundle/trunk/apps/tportal'
 alias tportal='cd ~/src/property/property_bundle/trunk/apps/tportal'
 alias mirror='cd ~/src/mirror-mirror'
-alias gst="git status"
-alias ss="script/start"
+alias masters="cd ~/src/property/property_bundle/trunk/apps/property/test/appearance/expected"
+
+#Rake
+alias be="bundle exec"
 alias brake="bundle exec rake"
-alias migrate="bundle exec rake db:migrate ; bundle exec rake db:migrate RAILS_ENV=test"
-alias solr="bundle exec rake solr:create_core ; bundle exec rake solr:create_core  RAILS_ENV=test"
-alias gmasters="bundle exec rake test:appearance:get_masters"
-alias umasters="bundle exec rake test:appearance:upload_masters"
-alias stop="osascript ~/src/stop.applescript property_app"
+alias solr="brake solr:reindex "
+alias migrate="brake db:migrate; brake db:migrate RAILS_ENV=test"
 alias up="svn up"
-alias up2="svn up; bundle install; bundle exec rake db:migrate ; bundle exec rake db:migrate RAILS_ENV=test "
-alias resetdb="bundle exec rake db:drop; bundle exec rake db:create; bundle exec rake db:migrate; bundle exec rake db:fixtures:load; bundle exec rake db:test:load"
-alias stopall="osascript -e 'tell application \"Terminal\" to quit' "
-alias applist="rake -T appearance "
-alias gmasters="bundle exec rake test:appearance:get_masters"
-alias pmasters="bundle exec rake test:appearance:upload_masters"
-alias masters="open /Users/zackwarburg/src/property/property_bundle/trunk/apps/property/test/appearance/expected"
-alias prodlogs="ssh zack@log1.core.densd.appfolio.net"
-alias qalogs="ssh zack@log201.core.atl.appfolio.net"
+alias up2="svn up; bundle install; migrate"
+alias resetdb="RAILS_ENV=test brake db:migrate:reset; brake db:migrate:reset; RAILS_ENV=test brake db:fixtures:load; brake db:fixtures:load"
+
+#start/restart/clean shit up
+alias ss="script/start"
 alias sel="launchctl stop homebrew.mxcl.selenium-server-standalone;sleep 5;launchctl start homebrew.mxcl.selenium-server-standalone"
-alias fit="rake fit"
-alias c="clear"
 alias mem="launchctl stop homebrew.mxcl.memcached; sleep 2;launchctl start homebrew.mxcl.memcached"
 
+#misc
+alias stop="osascript ~/src/stop.applescript property_app"
+alias stopall="osascript -e 'tell application \"Terminal\" to quit' "
+alias gmasters="brake test:appearance:get_masters"
+alias pmasters="brake test:appearance:upload_masters"
+alias prodlogs="ssh zack@log1.core.densd.appfolio.net"
+alias qalogs="ssh zack@log201.core.atl.appfolio.net"
+alias fit="rake fit"
+alias sql="/Applications/MAMP/Library/bin/mysql --host=localhost -uroot -proot"
 
+
+#git
+alias gst="git status"
 alias glog="git log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white)— %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative"
 
 alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 
-alias be="bundle exec"
+
 
 mp() { man -t $@ | open -f -a /Applications/Preview.app ;}
 
