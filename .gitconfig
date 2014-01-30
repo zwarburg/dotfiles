@@ -34,3 +34,5 @@
 	changed = green
 	untracked = cyan reverse
 	branch = magenta
+[core]
+	editor = mate -w

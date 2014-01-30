@@ -2,6 +2,7 @@ export PATH=/usr/local/bin:$PATH
 export PATH=/usr/local/sbin:$PATH
 
 source ~/dotfiles/scripts/rake_autocomplete.bash
+source ~/dotfiles/bash/color.bash
 
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
@@ -64,8 +65,8 @@ alias resetdb="RAILS_ENV=test brake db:migrate:reset; RAILS_ENV=test brake db:fi
 
 #start/restart/clean shit up
 alias ss="script/start"
-alias sel="launchctl stop homebrew.mxcl.selenium-server-standalone;sleep 5;launchctl start homebrew.mxcl.selenium-server-standalone"
-alias mem="launchctl stop homebrew.mxcl.memcached; sleep 2;launchctl start homebrew.mxcl.memcached"
+alias sel="print_red 'KILLING SELENIUM';launchctl stop homebrew.mxcl.selenium-server-standalone;sleep 3;print_blue 'STARTING SELENIUM';launchctl start homebrew.mxcl.selenium-server-standalone"
+alias mem="print_red 'KILLING MEMCACHE';launchctl stop homebrew.mxcl.memcached; sleep 2;print_blue 'STARTING MEMCACHE';launchctl start homebrew.mxcl.memcached"
 
 #misc
 alias stop="osascript ~/src/stop.applescript property_app"
