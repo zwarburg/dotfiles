@@ -1,7 +1,7 @@
-function vol {
-  osascript -e "set Volume $1"
-}
-alias quiet='vol 0.01'
+export PATH=/usr/local/bin:$PATH
+export PATH=/usr/local/sbin:$PATH
+
+source ~/dotfiles/scripts/rake_autocomplete.bash
 
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
@@ -56,11 +56,11 @@ alias masters="cd ~/src/property/property_bundle/trunk/apps/property/test/appear
 #Rake
 alias be="bundle exec"
 alias brake="bundle exec rake"
-alias solr="brake solr:reindex "
+alias solr="brake solr:reindex"
 alias migrate="brake db:migrate; brake db:migrate RAILS_ENV=test"
 alias up="svn up"
 alias up2="svn up; bundle install; migrate"
-alias resetdb="RAILS_ENV=test brake db:migrate:reset; brake db:migrate:reset; RAILS_ENV=test brake db:fixtures:load; brake db:fixtures:load"
+alias resetdb="RAILS_ENV=test brake db:migrate:reset; RAILS_ENV=test brake db:fixtures:load; brake db:migrate:reset; brake db:fixtures:load"
 
 #start/restart/clean shit up
 alias ss="script/start"
@@ -85,14 +85,23 @@ alias glog="git log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C
 alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 
 
+#functions
+mp()
+{ 
+	man -t $@ | open -f -a /Applications/Preview.app ;
+}
+function nuke_step()
+{
+  ps ax | grep $1 | awk '{print $1}' | xargs kill -9
+}
+function nuke()
+{
+  nuke_step passenger
+  nuke_step nginx
+  nuke_step multiplexer_ctl
+  nuke_step scheduler_ctl
+  nuke_step Terminal
+}
 
-mp() { man -t $@ | open -f -a /Applications/Preview.app ;}
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-
-export PATH=/usr/local/bin:$PATH
-export PATH=/usr/local/bin:$PATH
-export PATH=/usr/local/bin:$PATH
-export PATH=/usr/local/bin:$PATH
-export PATH=/usr/local/sbin:$PATH
-export PATH=/usr/local/sbin:$PATH
