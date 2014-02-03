@@ -21,7 +21,7 @@ case `id -u` in
       *) PS1="${PS1}$ ";;
 esac
 #http://blog.taylormcgann.com/2012/06/13/customize-your-shell-command-prompt/
-PS1="\[\033[0;96m\]\w \[\033[0;32m\]\u\[\033[0;34m\]\$(parse_git_branch_and_add_brackets) \[\033[0m\]$ "
+PS1="\[\e[0;96m\]\w \[\e[0;32m\]\u\[\e[0;91m\]\$(parse_git_branch_and_add_brackets) \[\e[0m\]$ "
 
 function parse_git_branch_and_add_brackets {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\ \[\1\]/'
@@ -44,24 +44,26 @@ alias prompt2="mate /etc/motd"
 #CD
 alias dot='cd ~/dotfiles'
 alias admin='cd ~/src/admin/trunk'
-alias trunk='cd ~/src/property/property_bundle/trunk'
-alias p='cd ~/src/property/property_bundle/trunk/apps/property'
-alias prop='cd ~/src/property/property_bundle/trunk/apps/property'
-alias l='cd ~/src/property/property_bundle/trunk/apps/listings'
-alias listings='cd ~/src/property/property_bundle/trunk/apps/listings'
-alias t='cd ~/src/property/property_bundle/trunk/apps/tportal'
-alias tportal='cd ~/src/property/property_bundle/trunk/apps/tportal'
-alias mirror='cd ~/src/mirror-mirror'
-alias masters="cd ~/src/property/property_bundle/trunk/apps/property/test/appearance/expected"
+alias gems='cd ~/src/gems'
+alias mirror='cd ~/src/gems/mirror-mirror'
+alias apm='cd ~/src/apm_bundle'
+alias p="cd ~/src/apm_bundle/apps/property"
+alias prop='p'
+alias l='cd ~/src/apm_bundle/apps/listings'
+alias listings='l'
+alias t='cd ~/src/apm_bundle/apps/tportal'
+alias tportal='t'
+alias masters="cd ~/src/apm_bundle/apps/property/test/appearance/expected"
 
 #Rake
 alias be="bundle exec"
 alias brake="bundle exec rake"
 alias solr="brake solr:reindex"
 alias migrate="brake db:migrate; brake db:migrate RAILS_ENV=test"
-alias up="svn up"
-alias up2="svn up; bundle install; migrate"
+alias up="git pull && (bundle check || bundle) && migrate; say 'migrating like a boss';"
+alias up2="up"
 alias resetdb="RAILS_ENV=test brake db:migrate:reset; RAILS_ENV=test brake db:fixtures:load; brake db:migrate:reset; brake db:fixtures:load"
+alias copyqa="print_blue 'Copying DB from QA'; rake dev:db_copy; rm *.bz2; print_blue 'cleaning SSNs from database';mysql -uroot -e 'use property_development; update contact_infos set tax_id = null;'"
 
 #start/restart/clean shit up
 alias ss="script/start"
@@ -80,8 +82,16 @@ alias sql="/Applications/MAMP/Library/bin/mysql --host=localhost -uroot -proot"
 
 
 #git
-alias gst="git status"
-alias glog="git log --graph --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold white)— %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative"
+alias promptgit="mate ~/dotfiles/.gitconfig"
+alias st="git status"
+alias gst="st"
+alias glog="git l"
+if [ -f `brew --prefix`/etc/bash_completion ]; then
+    . `brew --prefix`/etc/bash_completion
+fi
+
+
+
 
 alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 
@@ -106,3 +116,5 @@ function nuke()
 
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+# . ~/dotfiles/.git_svn_bash_prompt.sh

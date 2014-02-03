@@ -5,6 +5,10 @@
 	email = Zack.warburg@appfolio.com
 [credential]
 	helper = osxkeychain
+
+[diff]
+	tool = diffmerge
+	
 [alias]
 	b = branch
 	co = checkout
@@ -12,7 +16,7 @@
 	r = reset --hard
 	c = commit
 	b = branch
-	l = log --pretty=format:'%C(yellow)%H %n%C(yellow)%ad%n%Cblue[%cn]%n%s  %n' --decorate --date=short
+	l =log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold cyan)— %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative
 
 [color]
 	ui = true
