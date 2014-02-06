@@ -14,17 +14,30 @@ export RUBY_HEAP_FREE_MIN=1000000
 export RUBY_HEAP_MIN_SLOTS=8000000
 export RUBY_GC_MALLOC_LIMIT=300000000
 
-# set prompt: ``username@hostname:/directory $ ''
-PS1="\u@:\w"
-case `id -u` in
-      0) PS1="${PS1}# ";;
-      *) PS1="${PS1}$ ";;
-esac
-#http://blog.taylormcgann.com/2012/06/13/customize-your-shell-command-prompt/
+# Colors
+# \e[XX;YYm]
+# XX = foreground color
+# YY = background color, but really text styling
+        RED="\[\033[0;31m\]"
+     YELLOW="\[\033[0;33m\]"
+      GREEN="\[\033[0;32m\]"
+       BLUE="\[\033[0;34m\]"
+  LIGHT_RED="\[\033[1;31m\]"
+LIGHT_GREEN="\[\033[1;32m\]"
+      WHITE="\[\033[1;37m\]"
+ LIGHT_GRAY="\[\033[0;37m\]"
+ COLOR_NONE="\[\e[0m\]"
+
+# \[\e[0;96m\]\w  --> full working directory
+# \[\e[0;32m\]\u  --> current username 
+
+# branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
+
 PS1="\[\e[0;96m\]\w \[\e[0;32m\]\u\[\e[0;91m\]\$(parse_git_branch_and_add_brackets) \[\e[0m\]$ "
 
-function parse_git_branch_and_add_brackets {
-  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\ \[\1\]/'
+function parse_git_branch_and_add_brackets 
+{
+	git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\ \[\1\]/'
 }
 
 #Bash basics
@@ -40,7 +53,6 @@ alias reload="source ~/.bash_profile"
 alias prompt="mate ~/.bash_profile"
 alias prompt2="mate /etc/motd"
 
-
 #CD
 alias dot='cd ~/dotfiles'
 alias admin='cd ~/src/admin/trunk'
@@ -54,6 +66,11 @@ alias listings='l'
 alias t='cd ~/src/apm_bundle/apps/tportal'
 alias tportal='t'
 alias masters="cd ~/src/apm_bundle/apps/property/test/appearance/expected"
+
+for repo in $(ls ~/src/gems)
+do
+	alias $repo="cd ~/src/gems/$repo"
+done
 
 #Rake
 alias be="bundle exec"
@@ -80,7 +97,6 @@ alias qalogs="ssh zack@log201.core.atl.appfolio.net"
 alias fit="rake fit"
 alias sql="/Applications/MAMP/Library/bin/mysql --host=localhost -uroot -proot"
 
-
 #git
 alias promptgit="mate ~/dotfiles/.gitconfig"
 alias st="git status"
@@ -90,11 +106,7 @@ if [ -f `brew --prefix`/etc/bash_completion ]; then
     . `brew --prefix`/etc/bash_completion
 fi
 
-
-
-
 alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
-
 
 #functions
 mp()
@@ -117,4 +129,4 @@ function nuke()
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-# . ~/dotfiles/.git_svn_bash_prompt.sh
+# . ~/dotfiles/scripts/.prompt.sh

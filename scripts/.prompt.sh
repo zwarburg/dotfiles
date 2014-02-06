@@ -13,12 +13,6 @@
 #   2. Add the following line to the end of your ~/.profile or ~/.bash_profile:
 #        . ~/.git_svn_bash_prompt
 #
-# AUTHOR:
-# 
-#   Scott Woods <scott@westarete.com>
-#   West Arete Computing
-#
-#   Based on work by halbtuerke and lakiolen.
 #
 #   http://gist.github.com/31967
  
@@ -38,12 +32,7 @@ LIGHT_GREEN="\[\033[1;32m\]"
 function is_git_repository {
   git branch > /dev/null 2>&1
 }
- 
-# Detect whether the current directory is a subversion repository.
-function is_svn_repository {
-  test -d .svn
-}
- 
+
 # Determine the branch/state information for this git repository.
 function set_git_branch {
   # Capture the output of the "git status" command.
@@ -67,7 +56,7 @@ function set_git_branch {
       remote="↓"
     fi
   else
-    remote=""
+    remote="?"
   fi
   diverge_pattern="# Your branch and (.*) have diverged"
   if [[ ${git_status} =~ ${diverge_pattern} ]]; then
@@ -79,77 +68,31 @@ function set_git_branch {
   if [[ ${git_status} =~ ${branch_pattern} ]]; then
     branch=${BASH_REMATCH[1]}
   fi
- 
+
   # Set the final branch string.
   BRANCH="${state}(${branch})${remote}${COLOR_NONE} "
 }
  
-# Determine the branch information for this subversion repository. No support
-# for svn status, since that needs to hit the remote repository.
-function set_svn_branch {
-  # Capture the output of the "git status" command.
-  svn_info="$(svn info | egrep '^URL: ' 2> /dev/null)"
- 
-  # Get the name of the branch.
-  branch_pattern="^URL: .*/(branches|tags)/([^/]+)"
-  trunk_pattern="^URL: .*/trunk(/.*)?$"
-  if [[ ${svn_info} =~ $branch_pattern ]]; then
-    branch=${BASH_REMATCH[2]}
-  elif [[ ${svn_info} =~ $trunk_pattern ]]; then
-    branch='trunk'
-  fi
- 
-  # Set the final branch string.
-  BRANCH="(${branch}) "
-}
- 
-# Return the prompt symbol to use, colorized based on the return value of the
-# previous command.
-function set_prompt_symbol () {
-  if test $1 -eq 0 ; then
-      PROMPT_SYMBOL="\$"
-  else
-      PROMPT_SYMBOL="${RED}\$${COLOR_NONE}"
-  fi
+function parse_git_branch_and_add_brackets {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\ \[\1\]/'
 }
  
 # Set the full bash prompt.
 function set_bash_prompt () {
-  # Set the PROMPT_SYMBOL variable. We do this first so we don't lose the 
-  # return value of the last command.
-  set_prompt_symbol $?
  
   # Set the BRANCH variable.
   if is_git_repository ; then
     set_git_branch
-  elif is_svn_repository ; then
-    set_svn_branch
   else
     BRANCH=''
   fi
   
   # Set the bash prompt variable.
   # PS1="\u@\:\w ${BRANCH}${PROMPT_SYMBOL} "
-  PS1="\[\e[0;96m\]\w \[\e[0;32m\]\u\[\e[0;91m\]\ ${BRANCH}${PROMPT_SYMBOL} \[\e[0m\]$ "
+  PS1="\[\e[0;96m\]\w \[\e[0;32m\]\u\[\e[0;91m\]\$(parse_git_branch_and_add_brackets) ${BRANCH}\[\e[0m\]$ "
 }
+
+
  
-
-
-# PS1="\u@:\w"
-# case `id -u` in
-#       0) PS1="${PS1}# ";;
-#       *) PS1="${PS1}$ ";;
-# esac
-# #http://blog.taylormcgann.com/2012/06/13/customize-your-shell-command-prompt/
-# PS1="\[\e[0;96m\]\w \[\e[0;32m\]\u\[\e[0;91m\]\$(parse_git_branch_and_add_brackets) \[\e[0m\]$ "
-# 
-# function parse_git_branch_and_add_brackets {
-#   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\ \[\1\]/'
-# }
-
-
-
-
-
 # Tell bash to execute this function just before displaying its prompt.
 PROMPT_COMMAND=set_bash_prompt

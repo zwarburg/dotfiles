@@ -40,3 +40,4 @@
 	branch = magenta
 [core]
 	editor = mate -w
+	excludesfile = /Users/zackwarburg/dotfiles/.gitignore_global
