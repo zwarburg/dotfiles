@@ -16,7 +16,8 @@
 	r = reset --hard
 	c = commit
 	b = branch
-	l =log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold cyan)— %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=relative
+	l =log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(bold cyan)— %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=local
+	ld =log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ad)%C(reset) %C(white)%s%C(reset) %C(bold cyan)— %an%C(reset)%C(bold yellow)%d%C(reset)' --abbrev-commit --date=local
 
 [color]
 	ui = true

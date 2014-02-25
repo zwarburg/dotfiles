@@ -77,9 +77,9 @@ alias be="bundle exec"
 alias brake="bundle exec rake"
 alias solr="brake solr:reindex"
 alias migrate="brake db:migrate; brake db:migrate RAILS_ENV=test"
-alias up="git pull && (bundle check || bundle) && migrate; say 'migrating like a boss';"
+alias up="git pull; bundle install; migrate; say 'migrating like a boss';"
 alias up2="up"
-alias resetdb="RAILS_ENV=test brake db:migrate:reset; RAILS_ENV=test brake db:fixtures:load; brake db:migrate:reset; brake db:fixtures:load"
+alias resetdb="brake db:migrate:reset RAILS_ENV=test; brake db:fixtures:load  RAILS_ENV=test; brake db:migrate:reset; brake db:fixtures:load"
 alias copyqa="print_blue 'Copying DB from QA'; rake dev:db_copy; rm *.bz2; print_blue 'cleaning SSNs from database';mysql -uroot -e 'use property_development; update contact_infos set tax_id = null;'"
 
 #start/restart/clean shit up
@@ -102,6 +102,14 @@ alias promptgit="mate ~/dotfiles/.gitconfig"
 alias st="git status"
 alias gst="st"
 alias glog="git l"
+alias prune="git remote prune origin"
+alias pull="git pull; prune"
+alias squash="sq"
+function sq()
+{
+	git rebase -i HEAD~"$*"
+}
+
 if [ -f `brew --prefix`/etc/bash_completion ]; then
     . `brew --prefix`/etc/bash_completion
 fi
@@ -126,6 +134,9 @@ function nuke()
   nuke_step Terminal
 }
 
+function tabname {
+  printf "\e]1;$1\a"
+}
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
