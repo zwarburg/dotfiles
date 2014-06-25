@@ -2,9 +2,9 @@
 	default = upstream
 [user]
 	name = Zack Warburg
-	email = Zack.warburg@appfolio.com
+	email = zwarburg@gmail.com
 [credential]
-	helper = osxkeychain
+	helper = /opt/boxen/bin/boxen-git-credential
 
 [diff]
 	tool = diffmerge
@@ -41,4 +41,7 @@
 	branch = magenta
 [core]
 	editor = mate -w
-	excludesfile = /Users/zackwarburg/dotfiles/.gitignore_global
+	excludesfile = /opt/boxen/config/git/gitignore
+
+[hub]
+protocol = https

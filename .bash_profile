@@ -55,22 +55,13 @@ alias prompt2="mate /etc/motd"
 
 #CD
 alias dot='cd ~/dotfiles'
-alias admin='cd ~/src/admin/trunk'
-alias gems='cd ~/src/gems'
-alias mirror='cd ~/src/gems/mirror-mirror'
-alias apm='cd ~/src/apm_bundle'
-alias p="cd ~/src/apm_bundle/apps/property"
-alias prop='p'
-alias l='cd ~/src/apm_bundle/apps/listings'
-alias listings='l'
-alias t='cd ~/src/apm_bundle/apps/tportal'
-alias tportal='t'
-alias masters="cd ~/src/apm_bundle/apps/property/test/appearance/expected"
+alias p='cd ~/src/productplan'
+#alias gems='cd ~/src/gems'
 
-for repo in $(ls ~/src/gems)
-do
-	alias $repo="cd ~/src/gems/$repo"
-done
+# for repo in $(ls ~/src/gems)
+# do
+# 	alias $repo="cd ~/src/gems/$repo"
+# done
 
 #Rake
 alias be="bundle exec"
@@ -80,7 +71,6 @@ alias migrate="brake db:migrate; brake db:migrate RAILS_ENV=test"
 alias up="git pull; bundle install; migrate; say 'migrating like a boss';"
 alias up2="up"
 alias resetdb="brake db:migrate:reset RAILS_ENV=test; brake db:fixtures:load  RAILS_ENV=test; brake db:migrate:reset; brake db:fixtures:load"
-alias copyqa="print_blue 'Copying DB from QA'; rake dev:db_copy; rm *.bz2; print_blue 'cleaning SSNs from database';mysql -uroot -e 'use property_development; update contact_infos set tax_id = null;'"
 
 #start/restart/clean shit up
 alias ss="script/start"
@@ -88,14 +78,6 @@ alias sel="print_red 'KILLING SELENIUM';launchctl stop homebrew.mxcl.selenium-se
 alias mem="print_red 'KILLING MEMCACHE';launchctl stop homebrew.mxcl.memcached; sleep 2;print_blue 'STARTING MEMCACHE';launchctl start homebrew.mxcl.memcached"
 
 #misc
-alias stop="osascript ~/src/stop.applescript property_app"
-alias stopall="osascript -e 'tell application \"Terminal\" to quit' "
-alias gmasters="brake test:appearance:get_masters"
-alias pmasters="brake test:appearance:upload_masters"
-alias prodlogs="ssh zack@log1.core.densd.appfolio.net"
-alias qalogs="ssh zack@log201.core.atl.appfolio.net"
-alias fit="rake fit"
-alias sql="/Applications/MAMP/Library/bin/mysql --host=localhost -uroot -proot"
 
 #git
 alias promptgit="mate ~/dotfiles/.gitconfig"
@@ -112,6 +94,11 @@ function sq()
 
 if [ -f `brew --prefix`/etc/bash_completion ]; then
     . `brew --prefix`/etc/bash_completion
+fi
+
+#git autocomplete
+if [ -f ~/.git-completion.bash ]; then
+  . ~/.git-completion.bash
 fi
 
 alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
