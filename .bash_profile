@@ -8,11 +8,6 @@ export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 export EDITOR=TextEdit
 
-export RUBY_HEAP_SLOTS_INCREMENT=2000000
-export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
-export RUBY_HEAP_FREE_MIN=1000000
-export RUBY_HEAP_MIN_SLOTS=8000000
-export RUBY_GC_MALLOC_LIMIT=300000000
 
 # Colors
 # \e[XX;YYm]
@@ -55,7 +50,10 @@ alias prompt2="mate /etc/motd"
 
 #CD
 alias dot='cd ~/dotfiles'
-alias p='cd ~/src/productplan'
+alias p='cd ~/src/production'
+alias f='cd ~/src/fuzzy-adventure'
+alias y='cd ~/src/yolo-nemesis'
+alias src='cd ~/src'
 #alias gems='cd ~/src/gems'
 
 # for repo in $(ls ~/src/gems)
@@ -70,14 +68,17 @@ alias solr="brake solr:reindex"
 alias migrate="brake db:migrate; brake db:migrate RAILS_ENV=test"
 alias up="git pull; bundle install; migrate; say 'migrating like a boss';"
 alias up2="up"
-alias resetdb="brake db:migrate:reset RAILS_ENV=test; brake db:fixtures:load  RAILS_ENV=test; brake db:migrate:reset; brake db:fixtures:load"
-
+alias resetdb="brake db:migrate:reset; brake db:fixtures:load; brake db:migrate:reset RAILS_ENV=test"
+alias resetseed="brake db:migrate:reset RAILS_ENV=test; brake db:migrate:reset; brake db:seed"
 #start/restart/clean shit up
 alias ss="script/start"
 alias sel="print_red 'KILLING SELENIUM';launchctl stop homebrew.mxcl.selenium-server-standalone;sleep 3;print_blue 'STARTING SELENIUM';launchctl start homebrew.mxcl.selenium-server-standalone"
 alias mem="print_red 'KILLING MEMCACHE';launchctl stop homebrew.mxcl.memcached; sleep 2;print_blue 'STARTING MEMCACHE';launchctl start homebrew.mxcl.memcached"
 
-#misc
+#mysql
+alias mysqlstart="sudo /Library/StartupItems/MySQLCOM/MySQLCOM start"
+alias mysqlstop="sudo /Library/StartupItems/MySQLCOM/MySQLCOM stop"
+alias mysqlstatus="ps aux | grep mysql | grep -v grep"
 
 #git
 alias promptgit="mate ~/dotfiles/.gitconfig"
@@ -87,6 +88,7 @@ alias glog="git l"
 alias prune="git remote prune origin"
 alias pull="git pull; prune"
 alias squash="sq"
+alias b="git b"
 function sq()
 {
 	git rebase -i HEAD~"$*"
@@ -97,8 +99,8 @@ if [ -f `brew --prefix`/etc/bash_completion ]; then
 fi
 
 #git autocomplete
-if [ -f ~/.git-completion.bash ]; then
-  . ~/.git-completion.bash
+if [ -f ~/dotfiles/bash/.git-completion.bash ]; then
+  . ~/dotfiles/bash/.git-completion.bash
 fi
 
 alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"

@@ -4,7 +4,7 @@
 	name = Zack Warburg
 	email = zwarburg@gmail.com
 [credential]
-	helper = /opt/boxen/bin/boxen-git-credential
+	# helper = /opt/boxen/bin/boxen-git-credential
 
 [diff]
 	tool = diffmerge
@@ -41,7 +41,13 @@
 	branch = magenta
 [core]
 	editor = mate -w
-	excludesfile = /opt/boxen/config/git/gitignore
+	excludesfile = /Users/zwarburg/.gitignore_global
 
 [hub]
-protocol = https
+	protocol = https
+[difftool "sourcetree"]
+	cmd = opendiff "$LOCAL" "$REMOTE"
+	# path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
