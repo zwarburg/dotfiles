@@ -3,6 +3,7 @@ export PATH=/usr/local/sbin:$PATH
 
 source ~/dotfiles/scripts/rake_autocomplete.bash
 source ~/dotfiles/bash/color.bash
+# source /opt/boxen/env.sh
 
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
@@ -65,15 +66,17 @@ alias p='cd ~/src/productplan'
 
 #Rake
 alias be="bundle exec"
-alias brake="bundle exec rake"
+alias brake="be rake"
 alias solr="brake solr:reindex"
 alias migrate="brake db:migrate; brake db:migrate RAILS_ENV=test"
-alias up="git pull; bundle install; migrate; say 'migrating like a boss';"
+alias up="git pull; bundle install; migrate;"
 alias up2="up"
-alias resetdb="brake db:migrate:reset RAILS_ENV=test; brake db:fixtures:load  RAILS_ENV=test; brake db:migrate:reset; brake db:fixtures:load"
+alias resetdb="brake db:migrate:reset; brake db:fixtures:load"
+alias resettestdb="brake db:migrate:reset RAILS_ENV=test; brake db:fixtures:load RAILS_ENV=test"
 
 #start/restart/clean shit up
-alias ss="script/start"
+# alias ss="script/start"
+alias ss="PORT=3000 foreman start"
 alias sel="print_red 'KILLING SELENIUM';launchctl stop homebrew.mxcl.selenium-server-standalone;sleep 3;print_blue 'STARTING SELENIUM';launchctl start homebrew.mxcl.selenium-server-standalone"
 alias mem="print_red 'KILLING MEMCACHE';launchctl stop homebrew.mxcl.memcached; sleep 2;print_blue 'STARTING MEMCACHE';launchctl start homebrew.mxcl.memcached"
 
@@ -81,6 +84,7 @@ alias mem="print_red 'KILLING MEMCACHE';launchctl stop homebrew.mxcl.memcached; 
 
 #git
 alias promptgit="mate ~/dotfiles/.gitconfig"
+alias b="git b"
 alias st="git status"
 alias gst="st"
 alias glog="git l"
@@ -125,6 +129,6 @@ function tabname {
   printf "\e]1;$1\a"
 }
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-
+# [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+[ -f /opt/boxen/env.sh ] && source /opt/boxen/env.sh
 # . ~/dotfiles/scripts/.prompt.sh
