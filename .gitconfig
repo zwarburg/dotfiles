@@ -42,13 +42,7 @@
 [core]
 	editor = mate -w
 	excludesfile = /Users/zwarburg/.gitignore_global
-
 [hub]
 	protocol = https
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 [init]
 	templatedir = ~/.git-templates
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true

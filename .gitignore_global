@@ -1,2 +1,4 @@
 .idea/
 metrics/
+*~
+.DS_Store
