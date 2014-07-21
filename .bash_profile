@@ -8,21 +8,6 @@ export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 export EDITOR=TextEdit
 
-
-# Colors
-# \e[XX;YYm]
-# XX = foreground color
-# YY = background color, but really text styling
-        RED="\[\033[0;31m\]"
-     YELLOW="\[\033[0;33m\]"
-      GREEN="\[\033[0;32m\]"
-       BLUE="\[\033[0;34m\]"
-  LIGHT_RED="\[\033[1;31m\]"
-LIGHT_GREEN="\[\033[1;32m\]"
-      WHITE="\[\033[1;37m\]"
- LIGHT_GRAY="\[\033[0;37m\]"
- COLOR_NONE="\[\e[0m\]"
-
 # \[\e[0;96m\]\w  --> full working directory
 # \[\e[0;32m\]\u  --> current username 
 
@@ -33,6 +18,11 @@ PS1="\[\e[0;96m\]\w \[\e[0;32m\]\u\[\e[0;91m\]\$(parse_git_branch_and_add_bracke
 function parse_git_branch_and_add_brackets 
 {
 	git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\ \[\1\]/'
+}
+
+function parse_git_branch
+{
+	git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\ \1/'
 }
 
 #Bash basics
@@ -48,18 +38,16 @@ alias reload="source ~/.bash_profile"
 alias prompt="mate ~/.bash_profile"
 alias prompt2="mate /etc/motd"
 
+if [ -f `brew --prefix`/etc/bash_completion ]; then
+    . `brew --prefix`/etc/bash_completion
+fi
+
 #CD
 alias dot='cd ~/dotfiles'
 alias p='cd ~/src/production'
 alias f='cd ~/src/fuzzy-adventure'
 alias y='cd ~/src/yolo-nemesis'
 alias src='cd ~/src'
-#alias gems='cd ~/src/gems'
-
-# for repo in $(ls ~/src/gems)
-# do
-# 	alias $repo="cd ~/src/gems/$repo"
-# done
 
 #Rake
 alias be="bundle exec"
@@ -67,9 +55,9 @@ alias brake="bundle exec rake"
 alias solr="brake solr:reindex"
 alias migrate="brake db:migrate; brake db:migrate RAILS_ENV=test"
 alias up="git pull; bundle install; migrate; say 'migrating like a boss';"
-alias up2="up"
 alias resetdb="brake db:migrate:reset; brake db:fixtures:load; brake db:migrate:reset RAILS_ENV=test"
 alias resetseed="brake db:migrate:reset RAILS_ENV=test; brake db:migrate:reset; brake db:seed"
+
 #start/restart/clean shit up
 alias ss="script/start"
 alias sel="print_red 'KILLING SELENIUM';launchctl stop homebrew.mxcl.selenium-server-standalone;sleep 3;print_blue 'STARTING SELENIUM';launchctl start homebrew.mxcl.selenium-server-standalone"
@@ -82,21 +70,24 @@ alias mysqlstatus="ps aux | grep mysql | grep -v grep"
 
 #git
 alias promptgit="mate ~/dotfiles/.gitconfig"
-alias st="git status"
+alias st="b;line_break 30;git status"
 alias gst="st"
 alias glog="git l"
 alias prune="git remote prune origin"
 alias pull="git pull; prune"
 alias squash="sq"
 alias b="git b"
+alias push="git push origin \$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')"
+
+function line_break()
+{
+	seq  -f "#" -s '' $1;echo
+}
+
 function sq()
 {
 	git rebase -i HEAD~"$*"
 }
-
-if [ -f `brew --prefix`/etc/bash_completion ]; then
-    . `brew --prefix`/etc/bash_completion
-fi
 
 #git autocomplete
 if [ -f ~/dotfiles/bash/.git-completion.bash ]; then
@@ -128,5 +119,3 @@ function tabname {
 }
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-
-# . ~/dotfiles/scripts/.prompt.sh
