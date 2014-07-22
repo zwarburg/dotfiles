@@ -1,0 +1,28 @@
+# This hook will prevent you from commit directly to master. 
+if [ "$(git rev-parse --abbrev-ref HEAD)" == "master" ]
+then
+  exec < /dev/tty || echo 'You are trying to commit directly to master, this can only be done via terminal.'
+  read -p "You are on the master branch, are you sure you want to commit? (y/N) " -n 1 -r
+  if [ "$REPLY" = "" ]; then
+    REPLY='N'
+  fi
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]
+  then
+    read -p "Commits should be done on feature branches, are you really sure? (Y/N) " -n 1 -r
+    if [ "$REPLY" = "" ]; then
+      REPLY='N'
+    fi
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+      echo "Tread lightly...We are watching you...\n"
+    else
+      echo "Aborted.\n"
+      exit 1
+    fi
+  else
+    echo "Aborted.\n"
+    exit 1
+  fi
+fi
