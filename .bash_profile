@@ -15,6 +15,10 @@ export RUBY_HEAP_FREE_MIN=1000000
 export RUBY_HEAP_MIN_SLOTS=8000000
 export RUBY_GC_MALLOC_LIMIT=300000000
 
+# For Saucelabs
+export SAUCE_USERNAME=zwarburg
+export SAUCE_ACCESS_KEY=e40de4db-9d3f-4e5b-8bdf-854347626816
+
 # Colors
 # \e[XX;YYm]
 # XX = foreground color
@@ -53,10 +57,12 @@ alias c="clear"
 alias reload="source ~/.bash_profile"
 alias prompt="mate ~/.bash_profile"
 alias prompt2="mate /etc/motd"
+alias mlb="ssh -D 8080 -C -N "
 
 #CD
 alias dot='cd ~/dotfiles'
 alias p='cd ~/src/productplan'
+alias f='cd ~/src/factoidtracker'
 #alias gems='cd ~/src/gems'
 
 # for repo in $(ls ~/src/gems)
@@ -69,14 +75,26 @@ alias be="bundle exec"
 alias brake="be rake"
 alias solr="brake solr:reindex"
 alias migrate="brake db:migrate; brake db:migrate RAILS_ENV=test"
-alias up="git pull; bundle install; migrate;"
-alias up2="up"
+alias up="git pull; bundle install; migrate; prune"
 alias resetdb="brake db:migrate:reset; brake db:fixtures:load"
 alias resettestdb="brake db:migrate:reset RAILS_ENV=test; brake db:fixtures:load RAILS_ENV=test"
+alias resetalldb="resetdb; resettestdb"
 
 #start/restart/clean shit up
 # alias ss="script/start"
-alias ss="PORT=3000 foreman start"
+function ss()
+{
+	case "$(basename $(pwd))" in
+		productplan) 	PORT=3000 foreman start
+						;;
+		factoidtracker)	rails s
+						;;
+		*) echo "ERROR"
+			;;
+			
+	esac
+}
+
 alias sel="print_red 'KILLING SELENIUM';launchctl stop homebrew.mxcl.selenium-server-standalone;sleep 3;print_blue 'STARTING SELENIUM';launchctl start homebrew.mxcl.selenium-server-standalone"
 alias mem="print_red 'KILLING MEMCACHE';launchctl stop homebrew.mxcl.memcached; sleep 2;print_blue 'STARTING MEMCACHE';launchctl start homebrew.mxcl.memcached"
 
@@ -85,12 +103,14 @@ alias mem="print_red 'KILLING MEMCACHE';launchctl stop homebrew.mxcl.memcached; 
 #git
 alias promptgit="mate ~/dotfiles/.gitconfig"
 alias b="git b"
-alias st="git status"
+alias st="b;line_break 30;git status"
 alias gst="st"
 alias glog="git l"
 alias prune="git remote prune origin"
 alias pull="git pull; prune"
 alias squash="sq"
+alias push="git push origin \$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')"
+alias rebase="git rebase develop"
 function sq()
 {
 	git rebase -i HEAD~"$*"
@@ -123,6 +143,11 @@ function nuke()
   nuke_step multiplexer_ctl
   nuke_step scheduler_ctl
   nuke_step Terminal
+}
+
+function line_break()
+{
+	seq  -f "#" -s '' $1;echo
 }
 
 function tabname {
