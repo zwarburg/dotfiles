@@ -1,7 +1,7 @@
 [push]
 	default = upstream
 [user]
-	name = Zack Warburg
+	name = zwarburg
 	email = zwarburg@gmail.com
 [credential]
 	helper = /opt/boxen/bin/boxen-git-credential
@@ -41,7 +41,9 @@
 	branch = magenta
 [core]
 	editor = mate -w
-	excludesfile = /opt/boxen/config/git/gitignore
+	excludesfile = ~/src/dotfiles/.gitignore_global
 
 [hub]
 protocol = https
+[init]
+	templatedir = ~/.git-templates

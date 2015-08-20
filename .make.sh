@@ -12,7 +12,7 @@
 
 ########## Variables
 
-dir=~/dotfiles                    # dotfiles directory
+dir=~/src/dotfiles                    # dotfiles directory
 olddir=~/dotfiles_old             # old dotfiles backup directory
 files="bashrc bash_profile gitconfig"	      # list of files/folders to symlink in homedir
 

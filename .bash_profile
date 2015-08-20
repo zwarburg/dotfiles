@@ -1,18 +1,12 @@
 export PATH=/usr/local/bin:$PATH
 export PATH=/usr/local/sbin:$PATH
 
-source ~/dotfiles/scripts/rake_autocomplete.bash
-source ~/dotfiles/bash/color.bash
+source ~/src/dotfiles/scripts/rake_autocomplete.bash
+source ~/src/dotfiles/bash/color.bash
 
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 export EDITOR=TextEdit
-
-export RUBY_HEAP_SLOTS_INCREMENT=2000000
-export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
-export RUBY_HEAP_FREE_MIN=1000000
-export RUBY_HEAP_MIN_SLOTS=8000000
-export RUBY_GC_MALLOC_LIMIT=300000000
 
 # Colors
 # \e[XX;YYm]
@@ -29,13 +23,13 @@ LIGHT_GREEN="\[\033[1;32m\]"
  COLOR_NONE="\[\e[0m\]"
 
 # \[\e[0;96m\]\w  --> full working directory
-# \[\e[0;32m\]\u  --> current username 
+# \[\e[0;32m\]\u  --> current username
 
 # branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
 
 PS1="\[\e[0;96m\]\w \[\e[0;32m\]\u\[\e[0;91m\]\$(parse_git_branch_and_add_brackets) \[\e[0m\]$ "
 
-function parse_git_branch_and_add_brackets 
+function parse_git_branch_and_add_brackets
 {
 	git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\ \[\1\]/'
 }
@@ -52,10 +46,14 @@ alias c="clear"
 alias reload="source ~/.bash_profile"
 alias prompt="mate ~/.bash_profile"
 alias prompt2="mate /etc/motd"
+alias mlb="ssh -D 8080 -C -N "
 
 #CD
-alias dot='cd ~/dotfiles'
-alias p='cd ~/src/productplan'
+alias dot='cd ~/src/dotfiles'
+alias v='cd /Volumes'
+alias s='cd /Volumes/Source'
+alias rs3='cd /Volumes/Source/rs3'
+alias guides='cd /Volumes/Source/guides'
 #alias gems='cd ~/src/gems'
 
 # for repo in $(ls ~/src/gems)
@@ -69,15 +67,30 @@ alias brake="bundle exec rake"
 alias solr="brake solr:reindex"
 alias migrate="brake db:migrate; brake db:migrate RAILS_ENV=test"
 alias up="git pull; bundle install; migrate; say 'migrating like a boss';"
-alias up2="up"
 alias resetdb="brake db:migrate:reset RAILS_ENV=test; brake db:fixtures:load  RAILS_ENV=test; brake db:migrate:reset; brake db:fixtures:load"
 
 #start/restart/clean shit up
-alias ss="script/start"
 alias sel="print_red 'KILLING SELENIUM';launchctl stop homebrew.mxcl.selenium-server-standalone;sleep 3;print_blue 'STARTING SELENIUM';launchctl start homebrew.mxcl.selenium-server-standalone"
 alias mem="print_red 'KILLING MEMCACHE';launchctl stop homebrew.mxcl.memcached; sleep 2;print_blue 'STARTING MEMCACHE';launchctl start homebrew.mxcl.memcached"
+alias dynamo='bundle exec fake_dynamo --port 4567'
+alias sphinx='rake ts:rebuild'
+alias lion='rake ts:rebuild'
+
+ss () {
+    if [[ -f Procfile ]]
+    then
+        bundle exec foreman start
+    elif [[ -f ember-cli-build.js ]]
+    then
+        ember server
+    fi
+}
+
 
 #misc
+
+#RS4
+alias cop='rubocop --auto-correct'
 
 #git
 alias promptgit="mate ~/dotfiles/.gitconfig"
@@ -85,8 +98,13 @@ alias st="git status"
 alias gst="st"
 alias glog="git l"
 alias prune="git remote prune origin"
+alias push="git push origin \$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')"
+alias rebase="git rebase master"
 alias pull="git pull; prune"
 alias squash="sq"
+alias b="git b"
+alias stash="git stash"
+alias pop="git stash pop"
 function sq()
 {
 	git rebase -i HEAD~"$*"
@@ -105,7 +123,7 @@ alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 
 #functions
 mp()
-{ 
+{
 	man -t $@ | open -f -a /Applications/Preview.app ;
 }
 function nuke_step()
@@ -125,6 +143,14 @@ function tabname {
   printf "\e]1;$1\a"
 }
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+# [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-# . ~/dotfiles/scripts/.prompt.sh
+# . ~/dotfiles/scripts/.prompt.shexport PATH="$HOME/.rbenv/bin:$PATH"
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
