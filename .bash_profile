@@ -53,13 +53,10 @@ alias dot='cd ~/src/dotfiles'
 alias v='cd /Volumes'
 alias s='cd /Volumes/Source'
 alias rs3='cd /Volumes/Source/rs3'
+alias rs='cd /Volumes/Source/rs'
+alias rsem='cd /Volumes/Source/ember-rs'
 alias guides='cd /Volumes/Source/guides'
 #alias gems='cd ~/src/gems'
-
-# for repo in $(ls ~/src/gems)
-# do
-# 	alias $repo="cd ~/src/gems/$repo"
-# done
 
 #Rake
 alias be="bundle exec"
@@ -67,7 +64,7 @@ alias brake="bundle exec rake"
 alias solr="brake solr:reindex"
 alias migrate="brake db:migrate; brake db:migrate RAILS_ENV=test"
 alias up="git pull; bundle install; migrate; say 'migrating like a boss';"
-alias resetdb="brake db:migrate:reset RAILS_ENV=test; brake db:fixtures:load  RAILS_ENV=test; brake db:migrate:reset; brake db:fixtures:load"
+alias resetdb="brake db:migrate:reset RAILS_ENV=test; brake db:migrate:reset"
 
 #start/restart/clean shit up
 alias sel="print_red 'KILLING SELENIUM';launchctl stop homebrew.mxcl.selenium-server-standalone;sleep 3;print_blue 'STARTING SELENIUM';launchctl start homebrew.mxcl.selenium-server-standalone"
@@ -75,7 +72,7 @@ alias mem="print_red 'KILLING MEMCACHE';launchctl stop homebrew.mxcl.memcached; 
 alias dynamo='bundle exec fake_dynamo --port 4567'
 alias sphinx='rake ts:rebuild'
 alias lion='rake ts:rebuild'
-
+alias pg='rm /usr/local/var/postgres/postmaster.pid; pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start'
 ss () {
     if [[ -f Procfile ]]
     then
@@ -86,25 +83,33 @@ ss () {
     fi
 }
 
-
 #misc
 
 #RS4
-alias cop='rubocop --auto-correct'
+alias jcop="jscs app"
+alias cop="rubocop --auto-correct"
+alias es="rake es:reindex"
+alias dmigrate='bundle exec rake ddb:create CLASS=Audit RAILS_ENV=test;bundle exec rake ddb:create CLASS=Audit'
+upember (){
+	(rsem && git co master && git pull && npm install && bower install)
+}
+alias upem='upember'
+alias cleanem='rm -rf node_modules && rm -rf bower_components'
 
 #git
 alias promptgit="mate ~/dotfiles/.gitconfig"
-alias st="git status"
+alias st="git status;echo '########################## GIT STASH ##########################';git stash list;"
 alias gst="st"
 alias glog="git l"
 alias prune="git remote prune origin"
 alias push="git push origin \$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')"
-alias rebase="git rebase master"
+alias rebase="git rebase develop"
 alias pull="git pull; prune"
 alias squash="sq"
 alias b="git b"
 alias stash="git stash"
 alias pop="git stash pop"
+alias oops="git reset --soft HEAD^;echo 'Previous commit undone...';st"
 function sq()
 {
 	git rebase -i HEAD~"$*"
@@ -121,36 +126,26 @@ fi
 
 alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
 
+function stopmail()
+{
+	x=`lsof -Fp -i:1025`
+ 	kill -9 ${x##p}
+}
 #functions
 mp()
 {
 	man -t $@ | open -f -a /Applications/Preview.app ;
 }
-function nuke_step()
-{
-  ps ax | grep $1 | awk '{print $1}' | xargs kill -9
-}
-function nuke()
-{
-  nuke_step passenger
-  nuke_step nginx
-  nuke_step multiplexer_ctl
-  nuke_step scheduler_ctl
-  nuke_step Terminal
+function nuke (){
+	spring stopmail
+	pkill passenger
+	killall -9 ruby
 }
 
 function tabname {
   printf "\e]1;$1\a"
 }
 
-# [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-
-# . ~/dotfiles/scripts/.prompt.shexport PATH="$HOME/.rbenv/bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
-export PATH="$HOME/.rbenv/bin:$PATH"
+export STUB_STEWARD="Stub me bitches!"
 eval "$(rbenv init -)"
